@@ -4,56 +4,98 @@
 
 #include "game/game.hpp"
 
-#define WIDTH TFT_HEIGHT
-#define HEIGHT TFT_WIDTH
-
 TFT_eSPI tft;
 
-#define pushPixel(color) \
-    GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = tft.xset_mask[(uint8_t) ((color) >> 8)]; WR_H; \
-    GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = tft.xset_mask[(uint8_t) (color)]; WR_H;
+static HardwareSerial SerialFPGA(2);
 
-void render() {
-    tft.setWindow(0, 0, WIDTH-1, HEIGHT-1);
-
-    for (int i=0; i<Screen::SCREEN_HEIGHT; ++i) {
-        for (int j=0; j<Screen::SCREEN_WIDTH; ++j) {
-            auto b = Screen::_screen[i*Screen::SCREEN_WIDTH + j];
-            pushPixel(b); 
-            pushPixel(b);
-        }
-        for (int j=0; j<Screen::SCREEN_WIDTH; ++j) {
-            auto b = Screen::_screen[i*Screen::SCREEN_WIDTH + j];
-            pushPixel(b); 
-            pushPixel(b);
-        }
+static void applyInputChar(char c, InputData &data)
+{
+    switch (c)
+    {
+    case 'w':
+    case 'W':
+        data.flags = (1 << UP);
+        data.x = 0;
+        break;
+    case 's':
+    case 'S':
+        data.flags = (1 << DOWN);
+        data.x = 0;
+        break;
+    case 'a':
+    case 'A':
+        data.flags = (1 << LEFT);
+        data.x = 0;
+        break;
+    case 'd':
+    case 'D':
+        data.flags = (1 << RIGHT);
+        data.x = 0;
+        break;
+    case 'q':
+    case 'Q':
+        data.flags = 0;
+        data.x = 200;
+        break;
+    case 'e':
+    case 'E':
+        data.flags = 0;
+        data.x = -200;
+        break;
+    case 'f':
+    case 'F':
+        data.flags |= (1 << 7);
+        break;
+    case 'r':
+    case 'R':
+        data.flags |= (1 << 6);
+        break;
+    case ' ':
+        data.flags = 0;
+        data.x = 0;
+        break;
     }
 }
 
-InputData receiveData() {
-    InputData data;
-    Wire.requestFrom(8, 6);    // request 4 bytes from slave device #8
+void render() {
+    const int GAME_WIDTH = Screen::SCREEN_WIDTH;   // 240
+    const int GAME_HEIGHT = Screen::SCREEN_HEIGHT; // 160
+    const int DISPLAY_HEIGHT = 240;
+    const int Y_OFFSET = (DISPLAY_HEIGHT - GAME_HEIGHT) / 2; // 40 pixels down
 
-    if(Wire.available()) { // slave may send less than requested
-        uint8_t buffer[6];
-        Wire.readBytes(buffer, 6);
+    tft.setSwapBytes(true);
+    tft.pushImage(0, Y_OFFSET, GAME_WIDTH, GAME_HEIGHT, Screen::_screen);
+}
 
-        memcpy(&data, buffer, 6);
-        data.correct = true;
+InputData receiveData()
+{
+    static InputData data = {0, 0, 0, true};
+
+    data.flags &= ~((1 << 7) | (1 << 6));
+
+    if (SerialFPGA.available())
+    {
+        char c = SerialFPGA.read();
+        applyInputChar(c, data);
     }
-    else {
-        data.correct = false;
+    else if (Serial.available())
+    {
+        char c = Serial.read();
+        applyInputChar(c, data);
     }
 
+    data.correct = true;
     return data;
 }
 
 void setup() {
-    Wire.begin(21, 22);  
+    Wire.begin(21, 22);
     Serial.begin(115200);
+    SerialFPGA.begin(115200, SERIAL_8N1, 32, 33);
 
     tft.init();
     tft.setRotation(1);
+    tft.fillScreen(TFT_BLACK);
 
     Screen::fillScreen(screen_start);
     render();

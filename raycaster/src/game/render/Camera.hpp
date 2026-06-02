@@ -144,7 +144,10 @@ void Camera::drawSprites() {
 }
 
 float Camera::getAlpha(int y, float perpDistance, float floorXWall, float floorYWall) {
-    float currentDist = H / (2.0 * y - H);
+    float distDenominator = 2.0 * y - H;
+    if (distDenominator == 0.0f)
+        distDenominator = 1.0f;
+    float currentDist = H / distDenominator;
     float weight = currentDist / perpDistance;
 
     float currentFloorX = weight * floorXWall + (1.0 - weight) * pos.x;
@@ -154,6 +157,9 @@ float Camera::getAlpha(int y, float perpDistance, float floorXWall, float floorY
     int ty = int(float(FLOOR_HEIGHT) * currentFloorY) & (FLOOR_HEIGHT-1);
 
     int floorX = int(currentFloorX), floorY = int(currentFloorY);
+    floorX = max(1, min((int)MAP_WIDTH - 2, floorX));
+    floorY = max(1, min((int)MAP_HEIGHT - 2, floorY));
+
     int aoVertex[4] = {
         !!(gameMap[floorY-1][floorX-1]) + !!(gameMap[floorY-1][floorX]) + !!(gameMap[floorY][floorX-1]), //Top Left
         !!(gameMap[floorY-1][floorX]) + !!(gameMap[floorY-1][floorX+1]) + !!(gameMap[floorY][floorX+1]), //Top Right
@@ -271,7 +277,7 @@ void Camera::drawWalls() {
 
             auto yAlpha = float(texY)/(TEX_HEIGHT-1);
             float alpha = 1.0 + (aoAlpha - 1.0) * yAlpha;
-            c = smoothDarken(c, SDL_clamp(alpha, 0.0, 1.0));
+            c = smoothDarken(c, max(0.0f, min(1.0f, alpha)));
 
             Screen::drawPixel(x, y, blend(c, fogColor, blendDist));
         }
@@ -282,7 +288,10 @@ void Camera::drawWalls() {
         if(drawEnd < 0) 
             drawEnd = H; 
         for(int y=drawEnd+1; y<H; ++y) {
-            float currentDist = H / (2.0 * y - H);
+            float distDenominator = 2.0 * y - H;
+            if (distDenominator == 0.0f)
+                distDenominator = 1.0f;
+            float currentDist = H / distDenominator;
             float weight = currentDist / perpDistance;
 
             float currentFloorX = weight * floorXWall + (1.0 - weight) * pos.x;
@@ -294,6 +303,9 @@ void Camera::drawWalls() {
             uint16_t c = floorTexture[FLOOR_WIDTH*ty + tx];
 
             int floorX = int(currentFloorX), floorY = int(currentFloorY);
+            floorX = max(1, min((int)MAP_WIDTH - 2, floorX));
+            floorY = max(1, min((int)MAP_HEIGHT - 2, floorY));
+
             int aoVertex[4] = {
                 !!(gameMap[floorY-1][floorX-1]) + !!(gameMap[floorY-1][floorX]) + !!(gameMap[floorY][floorX-1]), //Top Left
                 !!(gameMap[floorY-1][floorX]) + !!(gameMap[floorY-1][floorX+1]) + !!(gameMap[floorY][floorX+1]), //Top Right
@@ -307,8 +319,8 @@ void Camera::drawWalls() {
 
             float xPer = float(tx)/(FLOOR_WIDTH-1), yPer = float(ty)/(FLOOR_HEIGHT-1);
             auto alpha = interpolate(aoColors, xPer, yPer);
-            c = smoothDarken(c, SDL_clamp(alpha, 0.0, 1.0));
-            aoAlpha = __min(aoAlpha, alpha);
+            c = smoothDarken(c, max(0.0f, min(1.0f, alpha)));
+            aoAlpha = min(aoAlpha, alpha);
 
             float floorFogDist = 255/fmaxf(currentDist, 1.0);
             Screen::drawPixel(x, y, blend(c, fogColor, floorFogDist));

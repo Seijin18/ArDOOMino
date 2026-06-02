@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <algorithm>
 #include "sprites.h"
 #include "../map.h"
 
@@ -30,16 +31,16 @@ Color operator*(Color c, float f) {
 }
 
 Color operator+(Color a, Color b) {
-    a.r = __min(255, b.r+a.r);
-    a.g = __min(255, b.g+a.g);
-    a.b = __min(255, b.b+a.b);
+    a.r = min(255, b.r + a.r);
+    a.g = min(255, b.g + a.g);
+    a.b = min(255, b.b + a.b);
 
     return a;
 }
 
 namespace Screen {
     static const size_t SCREEN_WIDTH = 240;
-    static const size_t SCREEN_HEIGHT = 160;
+    static const size_t SCREEN_HEIGHT = 160; // Game renders at 240x160
     static const size_t SCREEN_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT;
 
     static uint16_t _screen[SCREEN_SIZE];
@@ -50,7 +51,8 @@ namespace Screen {
     }
 
     //Also renders the image
-    inline void fillScreen(const uint16_t* image) {
+    inline void fillScreen(const uint16_t *image, int w = 240, int h = 160)
+    {
         memcpy(_screen, image, SCREEN_SIZE*sizeof(uint16_t));
     }
 
