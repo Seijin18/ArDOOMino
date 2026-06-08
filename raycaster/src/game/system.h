@@ -7,6 +7,8 @@
 #include <Arduino.h>
 
 constexpr float SENSITIVITY  = 5.0f;
+// Keypad sends Q/E once per press; x persists until space. Keep low for controllable turn.
+constexpr int16_t KEYPAD_TURN_RATE = 18;
 
 inline uint64_t getTime() {
     return micros();

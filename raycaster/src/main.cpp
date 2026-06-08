@@ -3,6 +3,7 @@
 #include <TFT_eSPI.h>
 
 #include "game/game.hpp"
+#include "game/system.h"
 
 TFT_eSPI tft;
 
@@ -35,12 +36,12 @@ static void applyInputChar(char c, InputData &data)
     case 'q':
     case 'Q':
         data.flags = 0;
-        data.x = 200;
+        data.x = KEYPAD_TURN_RATE;
         break;
     case 'e':
     case 'E':
         data.flags = 0;
-        data.x = -200;
+        data.x = -KEYPAD_TURN_RATE;
         break;
     case 'f':
     case 'F':
@@ -73,12 +74,15 @@ InputData receiveData()
 
     data.flags &= ~((1 << 7) | (1 << 6));
 
-    if (SerialFPGA.available())
+    // FPGA has priority: drain the whole UART queue each frame.
+    while (SerialFPGA.available())
     {
         char c = SerialFPGA.read();
         applyInputChar(c, data);
     }
-    else if (Serial.available())
+
+    // USB serial fallback for bench debug without FPGA.
+    while (Serial.available())
     {
         char c = Serial.read();
         applyInputChar(c, data);
@@ -101,13 +105,14 @@ void setup() {
     render();
     Game::setup();
     delay(1000);
+
+    Serial.println("ArDOOMino raycaster ready (Serial2 RX=GPIO32, 115200)");
 }
 
-float delta;
 bool over = false;
 
 void loop() {
-    static float delta;
+    static float delta = 0.0f;
     auto t = getTime();
 
     InputData input = receiveData();
@@ -122,6 +127,5 @@ void loop() {
 
     render();
 
-    delta = float(getTime() - t)/1000000.0f;
-    Serial.println(delta*1000000);
+    delta = float(getTime() - t) / 1000000.0f;
 }

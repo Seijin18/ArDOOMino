@@ -1,7 +1,6 @@
 {
-    "cmake.configureOnOpen": false,
     "clangd.arguments": [
-        "--compile-commands-dir=c:/Projetos/ArDOOMino/raycaster/.cache/clangd",
+        "--compile-commands-dir=c:/Projetos/ArDOOMino/tools/uart_sniffer/.cache/clangd",
         "--query-driver=C:/Users/marco/.platformio/packages/toolchain-*/bin/*,C:/Users/marco/.platformio/packages/tool-*/bin/*"
     ]
 }

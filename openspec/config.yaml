@@ -1,0 +1,5 @@
+schema: spec-driven
+context: |
+  ArDOOMino integrates DE2-115 (Quartus MIPS) with ESP32 raycaster via UART 115200.
+  Repos: ArDOOMino (ESP/OpenSpec), Quartus (FPGA), Compilador/156711 (C to ROM).
+  Simulation (Icarus L1-L3) is automated; physical T1/T2 are manual on bench.
