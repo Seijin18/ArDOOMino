@@ -446,7 +446,7 @@ Cabo: GND + GPIO35 (FPGA) → GPIO32 (ESP).
 
 | Observação | Causa provável |
 |------------|----------------|
-| Nenhum byte | ROM errada, `uart_tx.v`, ligação `CPU.v` → `lcd_write_enable` |
+| Nenhum byte | ROM errada, `uart_tx.v`, ligação `CPU.v` → `uart_tx_strobe` |
 | Lixo / baud errado | 115200, TX idle em nível **alto** |
 | Byte errado por tecla | `keypad.v`, `ardoomino_controller.c` |
 | Só no sniffer falha, sim OK | Quartus não recompilou após trocar `rom_os.txt` |

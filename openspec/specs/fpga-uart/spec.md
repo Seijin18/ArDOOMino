@@ -11,7 +11,7 @@ A saída serial `uart_tx` DEVE estar em **PIN_AG26** (GPIO[35]), padrão **3.3-V
 - Baud: **115200**
 - Formato: **8N1**
 - Idle: **nível alto**
-- Acionamento: opcode `LCD_WRITE_CHAR` / `serial_write` → `lcd_write_enable` + `rs[7:0]` em `CPU.v`
+- Acionamento: opcode `UART_WRITE_CHAR` / `serial_write` → `uart_tx_strobe` + `rs[7:0]` em `CPU.v`
 
 ### REQ-FPGA-UART-BUSY
 
