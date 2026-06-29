@@ -1,23 +1,23 @@
 # ArDOOMino
 
-A 3D Raycasting game engine built for the **ESP32**, rendering to a **240x240 ST7789 IPS Display** (ZJY-IPS130-V2.0) via SPI. 
+A 3D Raycasting game engine built for the **ESP32**, rendering to a **128x160 ST7735 TFT Display** in landscape orientation, via SPI.
 
-To bypass the ESP32's strict `.dram0` memory limits, the game renders natively at **240x160 pixels** and uses DMA block image transfers (`pushImage`) with letterboxing (black bars on the top and bottom) for high-framerate gameplay.
+To bypass the ESP32's strict `.dram0` memory limits, the game renders natively at **240x160 pixels** and uses DMA block image transfers (`pushImage`), downscaled row-by-row to the panel's 158x107 landscape window for high-framerate gameplay.
 
 ---
 
 ## 🛠️ Hardware Requirements
 
 1.  **ESP32 Development Board** (e.g., NodeMCU ESP32-WROOM / ESP32-D0WD)
-2.  **ST7789 240x240 TFT IPS Display** (Specific model tested: `ZJY-IPS130-V2.0`)
+2.  **ST7735 128x160 TFT Display** (BLACKTAB variant), used in landscape orientation
 3.  Micro-USB cable for flashing and serial communication.
 4.  Jumper wires.
 
 ### 📌 Wiring Configuration
 
-This project is configured right out of the box to run on the standard ESP32 VSPI pins. Since many 240x240 ST7789 displays do **not** have a `CS` (Chip Select) pin, the configuration ignores it.
+This project is configured right out of the box to run on the standard ESP32 VSPI pins.
 
-| Display Pin (ST7789) | ESP32 GPIO Pin | Description |
+| Display Pin (ST7735) | ESP32 GPIO Pin | Description |
 | :--- | :--- | :--- |
 | **VCC / VDD** | **3.3V** | Power Supply (Use 5V *only* if the board has a regulator) |
 | **GND**| **GND** | Ground |
@@ -25,8 +25,8 @@ This project is configured right out of the box to run on the standard ESP32 VSP
 | **SDA / MOSI** | **GPIO 23** | SPI Data (Master Out Slave In) |
 | **RES / RST** | **GPIO 16** | Reset |
 | **DC / RS** | **GPIO 17** | Data / Command |
+| **CS / SS** | **GPIO 5** | Chip Select |
 | **BLK**| **3.3V** | Backlight Control (MUST be connected for the screen to light up and not remain black!) |
-| *CS / SS (If present)*| *Not needed* | *Not defined in hardware. Leave disconnected or tie to GND.* |
 
 *Note on I2C:* The ESP32 `Wire` instance is initialized on pins `21` (SDA) and `22` (SCL) to support an external controller/I2C slave, but it is currently optional.
 
@@ -79,6 +79,6 @@ The game is currently configured to accept inputs via the Serial Monitor. Open y
 ## ⚙️ Technical Notes
 
 *   **Display Colors Inversion:** Because DMA block transfers (`pushImage`) send data in a big-endian format and ESP32 memory is little-endian, RGB channels get swapped natively. The function `tft.setSwapBytes(true)` is called before rendering to correct this.
-*   **SPI Speed:** The frame buffer requires heavy data transfer. The `SPI_FREQUENCY` is pushed securely to `40000000` (40 MHz) in `platformio.ini` to guarantee a smooth framerate.
-*   **Rendering Optimization:** Rather than iterating through every single pixel using `tft.pushColor()`, the engine now uses `tft.pushImage()` sending a pointer of the entire 16-bit color array `Screen::_screen` to the TFT. 
-*   **Letterboxing:** The top and bottom 40 pixels are painted black once in the `setup()` function. The loop only repaints the center 240x160 block.
+*   **SPI Speed:** The frame buffer requires heavy data transfer. The `SPI_FREQUENCY` is set to `27000000` (27 MHz) in `platformio.ini` to guarantee a smooth framerate.
+*   **Rendering Optimization:** Rather than iterating through every single pixel using `tft.pushColor()`, the engine pushes each scanline with `tft.pushPixels()` after downscaling it from the 240x160 source buffer to the panel's landscape window.
+*   **Landscape scaling:** `setRotation(1)` puts the 128x160 panel into a 160x128 landscape window. The game keeps its 3:2 aspect ratio by rendering into a 158x107 area (small offsets compensate for GRAM column glitches on some ST7735 modules), letterboxed within the panel.

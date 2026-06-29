@@ -119,7 +119,7 @@ Marque conclusão em `openspec/changes/validate-uart-hardware/tasks.md`.
    powershell -ExecutionPolicy Bypass -File C:\Projetos\ArDOOMino\scripts\build_rom.ps1 -Target controller -Use
    ```
 2. **Quartus:** Compile → Programmer → gravar → **SW[17] UP** (switch mais à esquerda).
-3. **Cabos:** GND comum + GPIO35 (FPGA) → GPIO32 (ESP). Display ST7789 conforme §2.1 do guia (BLK em 3.3 V).
+3. **Cabos:** GND comum + GPIO35 (FPGA) → GPIO32 (ESP). Display ST7735 128×160 em paisagem conforme §2.1 do guia (BLK em 3.3 V).
 4. **ESP32 — jogo** (substitui o sniffer):
    ```powershell
    cd C:\Projetos\ArDOOMino\raycaster

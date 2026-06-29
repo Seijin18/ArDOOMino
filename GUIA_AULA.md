@@ -31,7 +31,7 @@ PC sim (L1-L3 auto) → ROM → FPGA programada → ESP32 sniffer → T1/T2 fís
 | Item | Função |
 |------|--------|
 | Placa **DE2-115** | CPU MIPS + keypad + UART TX |
-| **ESP32** + display **ST7789** 240×240 | Raycaster |
+| **ESP32** + display **ST7735** 128×160 (paisagem) | Raycaster |
 | Cabos USB + **2 jumpers** (GND + UART) | Programação e link serial |
 | PC: **Quartus**, **PlatformIO**, **make/gcc** | Build |
 | *(Opcional)* adaptador **USB‑serial 3.3 V** | Ver bytes da FPGA sem ESP32 |
@@ -54,6 +54,8 @@ Pastas:
 
 ### 2.1 Display → ESP32
 
+Display **ST7735 128×160**, usado em **paisagem** (`setRotation(1)`, janela 160×128).
+
 | Display | ESP32 |
 |---------|-------|
 | VCC | 3.3 V |
@@ -62,6 +64,7 @@ Pastas:
 | SDA / MOSI | GPIO **23** |
 | RES | GPIO **16** |
 | DC | GPIO **17** |
+| CS | GPIO **5** |
 | BLK | 3.3 V *(obrigatório — sem isso tela preta)* |
 
 ### 2.2 FPGA ↔ ESP32 (UART 115200 8N1)
