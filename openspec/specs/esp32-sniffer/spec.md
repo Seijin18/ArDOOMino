@@ -24,6 +24,6 @@ Com ROM `uart_beacon.c`, o monitor DEVE mostrar fluxo de `RX: 0x55 'U'`.
 
 ### REQ-T2-KEYPAD-ACCEPT
 
-Com ROM `ardoomino_controller.c`, teclas 8/2/4/6/7/9/*/# DEVEM gerar `W`/`S`/`A`/`D`/`Q`/`E`/`F`/`R`; soltar envia espaço.
+Com ROM `ardoomino_controller.c`, teclas 2/5/4/6/1/3/#/* DEVEM gerar `W`/`S`/`A`/`D`/`Q`/`E`/`F`/`R`; soltar envia espaço.
 
 Roteiro: `docs/PHYSICAL_TESTS.md`.

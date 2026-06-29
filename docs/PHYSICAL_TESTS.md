@@ -34,14 +34,14 @@ O top `CPU` liga a leitura do matricial aos LEDs da placa (sem depender do firmw
 | LED | Significado |
 |-----|-------------|
 | **LEDR[15:0]** | Máscara one-hot bruta (`keypad_segment`); um LED vermelho por posição da matriz |
-| **LEDG[0]** | Tecla **8** (frente) |
-| **LEDG[1]** | Tecla **2** |
+| **LEDG[0]** | Tecla **2** (frente) |
+| **LEDG[1]** | Tecla **5** |
 | **LEDG[2]** | Tecla **4** |
 | **LEDG[3]** | Tecla **6** |
-| **LEDG[4]** | Tecla **7** |
-| **LEDG[5]** | Tecla **9** |
-| **LEDG[6]** | Tecla **\*** |
-| **LEDG[7]** | Tecla **#** |
+| **LEDG[4]** | Tecla **1** |
+| **LEDG[5]** | Tecla **3** |
+| **LEDG[6]** | Tecla **#** |
+| **LEDG[7]** | Tecla **\*** |
 | **LEDG[8]** | Qualquer tecla pressionada |
 
 Pressionar e soltar: os LEDs acompanham o scan (pode haver breve persistência até o keypad limpar a máscara). Use isso no **T2** junto com o sniffer UART.
@@ -82,7 +82,7 @@ pio device monitor -b 115200
 | LEDs do teclado OK mas UART morto | LEDs vêm do scanner (50 MHz); UART vem da **CPU** — não provam beacon/UART |
 | Um `U` e para | ROM antiga com delay grande — regenere `uart_beacon.c` e recompile |
 | Lixo / caracteres estranhos | baud 115200, TX idle alto, GND comum |
-| T2: pressionar 8 não gera `W` | ROM controller ativa? **SW[17] UP** após gravar? |
+| T2: pressionar 2 não gera `W` | ROM controller ativa? **SW[17] UP** após gravar? |
 
 ---
 
@@ -96,14 +96,14 @@ pio device monitor -b 115200
 
 | Tecla | Esperado no monitor |
 |:-----:|:-------------------:|
-| 8 | `W` |
-| 2 | `S` |
+| 2 | `W` |
+| 5 | `S` |
 | 4 | `A` |
 | 6 | `D` |
-| 7 | `Q` |
-| 9 | `E` |
-| * | `F` |
-| # | `R` |
+| 1 | `Q` |
+| 3 | `E` |
+| # | `F` |
+| * | `R` |
 | Soltar | espaço |
 
 Marque conclusão em `openspec/changes/validate-uart-hardware/tasks.md`.
@@ -129,12 +129,12 @@ Marque conclusão em `openspec/changes/validate-uart-hardware/tasks.md`.
 
 | Tecla | Ação no jogo |
 |:-----:|--------------|
-| 8 | Frente |
-| 2 | Trás |
+| 2 | Frente |
+| 5 | Trás |
 | 4 / 6 | Strafe |
-| 7 / 9 | Girar |
-| * | Atirar |
-| # | Interagir |
+| 1 / 3 | Girar |
+| # | Atirar |
+| * | Interagir |
 | Soltar | Para |
 
 **Passa se:** mapa visível no TFT **e** personagem responde ao keypad da FPGA.

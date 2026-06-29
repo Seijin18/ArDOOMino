@@ -89,7 +89,7 @@ Com o bitstream atual (`CPU` + `ledr`/`ledg`), o teclado acende LEDs **sem depen
 
 | LED | Tecla / função |
 |-----|----------------|
-| **LEDG[0]–[7]** | 8, 2, 4, 6, 7, 9, *, # |
+| **LEDG[0]–[7]** | 2, 5, 4, 6, 1, 3, #, * |
 | **LEDG[8]** | Qualquer tecla pressionada |
 | **LEDR[15:0]** | Máscara one-hot bruta (debug avançado) |
 
@@ -99,14 +99,14 @@ Use no **T2** junto com o sniffer UART. Detalhes em [docs/PHYSICAL_TESTS.md](doc
 
 | Tecla | Ação | UART |
 |:-----:|------|:----:|
-| 8 | Frente | `W` |
-| 2 | Trás | `S` |
+| 2 | Frente | `W` |
+| 5 | Trás | `S` |
 | 4 | Esquerda | `A` |
 | 6 | Direita | `D` |
-| 7 | Girar esq. | `Q` |
-| 9 | Girar dir. | `E` |
-| * | Atirar | `F` |
-| # | Ação | `R` |
+| 1 | Girar esq. | `Q` |
+| 3 | Girar dir. | `E` |
+| # | Atirar | `F` |
+| * | Ação | `R` |
 | Soltar | Parar | espaço |
 
 ---
