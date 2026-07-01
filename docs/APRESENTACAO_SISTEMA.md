@@ -70,8 +70,8 @@ if (key != last) {
     else if (key == 32)    serial_write(83); // '5' → 'S' (trás)
     else if (key == 16)    serial_write(65); // '4' → 'A' (esquerda)
     else if (key == 64)    serial_write(68); // '6' → 'D' (direita)
-    else if (key == 1)     serial_write(81); // '1' → 'Q' (girar esq.)
-    else if (key == 4)     serial_write(69); // '3' → 'E' (girar dir.)
+    else if (key == 1)     serial_write(69); // tecla 3 (0x0001) → 'E' (girar dir.)
+    else if (key == 4)     serial_write(81); // tecla 1 (0x0004) → 'Q' (girar esq.)
     else if (key == 4096)  serial_write(82); // '*' → 'R' (ação)
     else if (key != 0)     serial_write(70); // '#' → 'F' (atirar)
     last = key;
@@ -84,6 +84,10 @@ if (key != last) {
 > então o literal `16384` (`0x4000`, one-hot da tecla `#`) seria truncado para 0 e a
 > comparação nunca casaria. Por isso ela é tratada como catch-all (`key != 0`), após todas
 > as outras teclas específicas.
+
+> **Nota sobre as teclas 1 e 3 (rotação):** no teclado físico usado, os one-hots das teclas
+> 1 e 3 estão trocados em relação ao decode canônico do `keypad.v`, então `0x0001` envia `E`
+> e `0x0004` envia `Q` — assim a tecla **1 gira à esquerda** e a **3 à direita**, como esperado.
 
 ### Estágio 4 — Transmissão UART por hardware (FPGA → ESP32)
 
