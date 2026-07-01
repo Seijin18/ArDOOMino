@@ -72,13 +72,18 @@ if (key != last) {
     else if (key == 64)    serial_write(68); // '6' → 'D' (direita)
     else if (key == 1)     serial_write(81); // '1' → 'Q' (girar esq.)
     else if (key == 4)     serial_write(69); // '3' → 'E' (girar dir.)
-    else if (key == 16384) serial_write(70); // '#' → 'F' (atirar)
     else if (key == 4096)  serial_write(82); // '*' → 'R' (ação)
+    else if (key != 0)     serial_write(70); // '#' → 'F' (atirar)
     last = key;
 }
 ```
 
 `serial_write()` é uma função *builtin* do compilador: traduzida diretamente para a instrução de máquina `UART_WRITE_CHAR`.
+
+> **Nota sobre a tecla `#` (F):** o campo imediato do assembler caseiro tem **14 bits**,
+> então o literal `16384` (`0x4000`, one-hot da tecla `#`) seria truncado para 0 e a
+> comparação nunca casaria. Por isso ela é tratada como catch-all (`key != 0`), após todas
+> as outras teclas específicas.
 
 ### Estágio 4 — Transmissão UART por hardware (FPGA → ESP32)
 
@@ -93,7 +98,7 @@ if (key != last) {
 
 | FPGA (DE2-115) | ESP32 |
 |---|---|
-| GPIO[35] / `PIN_AG26` (saída `uart_tx`) | GPIO 32 (RX do `Serial2`) |
+| GPIO[34] / `PIN_AH23` (saída `uart_tx`) | GPIO 32 (RX do `Serial2`) |
 | GND | GND |
 
 Comunicação **unidirecional** — só a FPGA transmite, o ESP32 nunca responde.

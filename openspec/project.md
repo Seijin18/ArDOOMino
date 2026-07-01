@@ -11,7 +11,7 @@
 ## Link UART (placa)
 
 - **115200 8N1**, unidirecional FPGA → ESP32
-- FPGA `uart_tx` → **GPIO[35]** (`PIN_AG26`)
+- FPGA `uart_tx` → **GPIO[34]** (`PIN_AH23`)
 - ESP32 **GPIO 32** = RX (`Serial2`)
 - **GND comum** obrigatório
 - Não conectar GPIO 33 (TX ESP) à FPGA

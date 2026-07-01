@@ -14,7 +14,7 @@ Tudo que **não** precisa de hardware já foi rodado e está verde. Na aula sobr
 | 6 | Sim L3 (CPU+ROM+UART) | `-Level 3` → 15/15 | OK |
 | 7 | Build ESP32 sniffer | `pio run` em `tools/uart_sniffer` | OK |
 | 8 | Build ESP32 jogo | `pio run -e esp32dev` em `raycaster` | OK |
-| 9 | Pinagem `CPU` + LEDs | `ProcessadorMIPS.qsf` (AG26, keypad GPIO, LEDR/LEDG) | OK |
+| 9 | Pinagem `CPU` + LEDs | `ProcessadorMIPS.qsf` (AH23, keypad GPIO, LEDR/LEDG) | OK |
 
 Reconferir tudo de uma vez (≈ 30 s):
 
@@ -38,7 +38,7 @@ Só isto exige o Quartus (não automatizável aqui):
 
 Sequência mínima (roteiro detalhado em [PHYSICAL_TESTS.md](PHYSICAL_TESTS.md)):
 
-1. **Cabo:** GND comum + GPIO[35] (FPGA, PIN_AG26) → GPIO 32 (ESP32). Não ligar GPIO 33.
+1. **Cabo:** GND comum + GPIO[34] (FPGA, PIN_AH23) → GPIO 32 (ESP32). Não ligar GPIO 33.
 2. **ESP sniffer:** `pio run -t upload` em `tools/uart_sniffer` + `pio device monitor -b 115200`.
 3. **T1:** ativar `rom_os_beacon.txt` → gravar FPGA → ver `U` no monitor.
 4. **T2:** ativar `rom_os_controller.txt` → gravar FPGA → teclas geram `W/S/A/D/Q/E/F/R`; LEDs verdes acendem por tecla.
@@ -58,5 +58,5 @@ Copy-Item C:\Projetos\Quartus\rom_os_controller.txt C:\Projetos\Quartus\rom_os.t
 - [ ] Notebook com Quartus + os `.sof` já compilados (controller e, se possível, beacon)
 - [ ] DE2-115 + cabo USB-Blaster
 - [ ] ESP32 + display + cabo USB
-- [ ] 2 jumpers (GND + sinal) para GPIO35→GPIO32
+- [ ] 2 jumpers (GND + sinal) para GPIO34→GPIO32
 - [ ] *(Opcional)* adaptador USB-serial 3.3 V para sniffer sem ESP32

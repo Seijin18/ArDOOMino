@@ -4,7 +4,7 @@
 
 ### REQ-FPGA-UART-PIN
 
-A saída serial `uart_tx` DEVE estar em **PIN_AG26** (GPIO[35]), padrão **3.3-V LVTTL**.
+A saída serial `uart_tx` DEVE estar em **PIN_AH23** (GPIO[34], JP5 pino 39), banco 4 em **2.5 V** (VCCIO fixo — 3.3-V LVTTL gera erro 169026). Pino anterior GPIO[35]/PIN_AG26 (pino 40) apresentou falha física.
 
 ### REQ-FPGA-UART-PROTO
 

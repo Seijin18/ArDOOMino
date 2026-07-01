@@ -4,7 +4,7 @@ Sketch mínimo: lê `Serial2` (GPIO 32) e imprime no monitor USB.
 
 ## Cabo
 
-- FPGA **GPIO35** (TX) → ESP32 **GPIO 32** (RX)
+- FPGA **GPIO34** (TX) → ESP32 **GPIO 32** (RX)
 - **GND** comum
 
 ## Uso

@@ -50,7 +50,7 @@ Pressionar e soltar: os LEDs acompanham o scan (pode haver breve persistência a
 
 | FPGA (DE2-115) | ESP32 |
 |----------------|-------|
-| GPIO[35] TX (`PIN_AG26`) | GPIO **32** (RX `Serial2`) |
+| GPIO[34] TX (`PIN_AH23`) | GPIO **32** (RX `Serial2`) |
 | GND | GND |
 
 115200 8N1. Não ligar GPIO 33 (TX do ESP) à FPGA.
@@ -119,7 +119,7 @@ Marque conclusão em `openspec/changes/validate-uart-hardware/tasks.md`.
    powershell -ExecutionPolicy Bypass -File C:\Projetos\ArDOOMino\scripts\build_rom.ps1 -Target controller -Use
    ```
 2. **Quartus:** Compile → Programmer → gravar → **SW[17] UP** (switch mais à esquerda).
-3. **Cabos:** GND comum + GPIO35 (FPGA) → GPIO32 (ESP). Display ST7735 128×160 em paisagem conforme §2.1 do guia (BLK em 3.3 V).
+3. **Cabos:** GND comum + GPIO34 (FPGA) → GPIO32 (ESP). Display ST7735 128×160 em paisagem conforme §2.1 do guia (BLK em 3.3 V).
 4. **ESP32 — jogo** (substitui o sniffer):
    ```powershell
    cd C:\Projetos\ArDOOMino\raycaster

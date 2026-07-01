@@ -71,7 +71,7 @@ Display **ST7735 128×160**, usado em **paisagem** (`setRotation(1)`, janela 160
 
 | DE2-115 | ESP32 |
 |---------|-------|
-| **GPIO[35]** (`PIN_AG26`, saída `uart_tx`) | **GPIO 32** (RX do `Serial2`) |
+| **GPIO[34]** (`PIN_AH23`, saída `uart_tx`) | **GPIO 32** (RX do `Serial2`) |
 | **GND** | **GND** |
 
 - Comunicação **unidirecional**: FPGA transmite, ESP32 recebe.
@@ -166,7 +166,7 @@ Roteiro T1/T2: [docs/PHYSICAL_TESTS.md](docs/PHYSICAL_TESTS.md).
 1. **ROM** — `build_rom.ps1 -Target controller` *(não use `rom_os_kernel.txt` — é o SO, não o controller.)*
 2. **FPGA** — Quartus: `ProcessadorMIPS.qpf` → Compile → Programmer → `.sof` → **SW[17] UP**.
 3. **ESP32** — upload em `raycaster/`.
-4. **Cabos** — GND + GPIO35 (FPGA) → GPIO32 (ESP32).
+4. **Cabos** — GND + GPIO34 (FPGA) → GPIO32 (ESP32).
 5. **Teste** — mapa no display; tecla **8** move; soltar para.
 
 **Critério de sucesso:** personagem responde ao keypad e para ao soltar.
@@ -431,7 +431,7 @@ cd C:\Projetos\ArDOOMino\tools\uart_sniffer
 pio run -t upload
 pio device monitor -b 115200
 ```
-Cabo: GND + GPIO35 (FPGA) → GPIO32 (ESP).
+Cabo: GND + GPIO34 (FPGA) → GPIO32 (ESP).
 
 **Opção B — jogo como receptor** *(após T1/T2 OK)*  
 1. Suba o raycaster ([E1](#e1-display-e-boot-do-esp32)).  
@@ -439,7 +439,7 @@ Cabo: GND + GPIO35 (FPGA) → GPIO32 (ESP).
 
 **Opção C — Adaptador USB‑serial 3.3 V** *(debug sem ESP32)*  
 1. FPGA GND → GND do adaptador.  
-2. GPIO35 (TX FPGA) → **RX** do adaptador.  
+2. GPIO34 (TX FPGA) → **RX** do adaptador.  
 3. Terminal serial **115200 8N1**.  
 4. Pressione **8** → deve aparecer `W`; solte → espaço.
 
@@ -475,7 +475,7 @@ Cabo: GND + GPIO35 (FPGA) → GPIO32 (ESP).
 **Pré-requisitos:** E1+E2 OK, F2 OK (bytes corretos no sniffer ou tecla 8 → `W`).
 
 1. GND comum **obrigatório**.
-2. GPIO35 → GPIO32 (único fio de sinal).
+2. GPIO34 → GPIO32 (único fio de sinal).
 3. Suba ESP32 com jogo; FPGA programada e resetada.
 4. **Não** abra monitor USB enviando `W` ao mesmo tempo — prioridade é `Serial2`, mas debug fica confuso.
 
@@ -520,7 +520,7 @@ Cabo: GND + GPIO35 (FPGA) → GPIO32 (ESP).
 - [ ] [F1](#f1--programação-quartus) — FPGA programada (top `CPU`)
 - [ ] **T1** — beacon + sniffer (`PHYSICAL_TESTS.md`)
 - [ ] **T2** — controller + sniffer + LEDs §2.4
-- [ ] Jumpers: **GND** + **GPIO35 → GPIO32**
+- [ ] Jumpers: **GND** + **GPIO34 → GPIO32**
 
 **Sistema completo:**
 

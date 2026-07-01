@@ -18,7 +18,7 @@ void setup() {
     Serial.println();
     Serial.println("=== FPGA UART sniffer (Serial2 RX=GPIO32) ===");
     Serial.println("Baud: 115200 8N1");
-    Serial.println("Cabo: FPGA GPIO[35] (JP5 pino 40, PIN_AG26) -> ESP32 GPIO32 + GND comum");
+    Serial.println("Cabo: FPGA GPIO[34] (JP5 pino 39, PIN_AH23) -> ESP32 GPIO32 + GND comum");
     Serial.println("ROM T1: rom_os_beacon.txt copiado para rom_os.txt ANTES do Compile Quartus");
     Serial.println();
 
@@ -56,7 +56,7 @@ void loop() {
         print_line_state("  Linha");
         Serial.println("  Checklist:");
         Serial.println("  1) GND FPGA <-> GND ESP (obrigatorio)");
-        Serial.println("  2) Sinal: GPIO35 FPGA -> GPIO32 ESP (NAO GPIO33)");
+        Serial.println("  2) Sinal: GPIO34 FPGA -> GPIO32 ESP (NAO GPIO33)");
         Serial.println("  3) Quartus le so rom_os.txt: copie rom_os_beacon.txt e RECOMPILE");
         Serial.println("  4) Apos programar FPGA: SW[17] (switch esquerda) para CIMA");
         Serial.println("  5) T2: com ROM controller, tecla 8 deve enviar 'W'");
